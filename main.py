@@ -11,19 +11,33 @@ def main():
     clock = pygame.time.Clock() # instantiate clock
     dt = 0 # delta time
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
     print("Starting asteroids!")
     print(f"Screen width: {SCREEN_WIDTH}")
     print(f"Screen height: {SCREEN_HEIGHT}")
-    player = Player(x=(SCREEN_WIDTH/2), y=(SCREEN_HEIGHT/2))
+
+    player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+
+    updatable = pygame.sprite.Group() # group of updatable (position) sprites
+    drawable = pygame.sprite.Group() # group of drawable sprites
+
+    Player.containers = (updatable, drawable) # put Player class in both groups
+
     while True:
         for event in pygame.event.get(): # loop until user quits
             if event.type == pygame.QUIT:
                 return 
+            
+        for i in updatable:
+            i.update(dt)
+
         screen.fill("black") # fill with black
-        player.draw(screen)
-        player.update(dt)
+
+        for i in drawable:
+            i.draw(screen)
+
         pygame.display.flip() # update display
-        dt = clock.tick(60) / 1000 # framerate to 60 fps and return amount of time since last call (delta time)
+        dt = clock.tick(60) / 1000 # framerate to 60 fps 
 
 
 if __name__ == "__main__":
