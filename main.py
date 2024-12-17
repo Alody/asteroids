@@ -1,43 +1,47 @@
 # Don't forget source venv/bin/activate to enter venv
 import pygame
-import os
-os.environ['SDL_AUDIODRIVER'] = 'dsp'
 from constants import *
 from player import Player
+from asteroid import Asteroid
+from asteroidfield import AsteroidField
+
 
 
 def main():
     pygame.init()
-    clock = pygame.time.Clock() # instantiate clock
-    dt = 0 # delta time
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    clock = pygame.time.Clock()
 
-    print("Starting asteroids!")
-    print(f"Screen width: {SCREEN_WIDTH}")
-    print(f"Screen height: {SCREEN_HEIGHT}")
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+    asteroids = pygame.sprite.Group()
 
-    player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+    Player.containers = (updatable, drawable)
+    Asteroid.containers = (asteroids, updatable, drawable)
+    AsteroidField.containers = updatable
+    asteroid_field = AsteroidField()
 
-    updatable = pygame.sprite.Group() # group of updatable (position) sprites
-    drawable = pygame.sprite.Group() # group of drawable sprites
+    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
-    Player.containers = (updatable, drawable) # put Player class in both groups
+    dt = 0
 
     while True:
-        for event in pygame.event.get(): # loop until user quits
+        for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return 
-            
-        for i in updatable:
-            i.update(dt)
+                return
 
-        screen.fill("black") # fill with black
+        for obj in updatable:
+            obj.update(dt)
 
-        for i in drawable:
-            i.draw(screen)
+        screen.fill("black")
 
-        pygame.display.flip() # update display
-        dt = clock.tick(60) / 1000 # framerate to 60 fps 
+        for obj in drawable:
+            obj.draw(screen)
+
+        pygame.display.flip()
+
+        # limit the framerate to 60 FPS
+        dt = clock.tick(60) / 1000
 
 
 if __name__ == "__main__":
