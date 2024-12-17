@@ -21,6 +21,7 @@ def main():
                 return 
         screen.fill("black") # fill with black
         player.draw(screen)
+        player.update(dt)
         pygame.display.flip() # update display
         dt = clock.tick(60) / 1000 # framerate to 60 fps and return amount of time since last call (delta time)
 
