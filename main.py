@@ -6,16 +6,19 @@ from constants import *
 
 def main():
     pygame.init()
+    clock = pygame.time.Clock() # instantiate clock
+    dt = 0 # delta time
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     print("Starting asteroids!")
     print(f"Screen width: {SCREEN_WIDTH}")
     print(f"Screen height: {SCREEN_HEIGHT}")
     while True:
-        screen.fill((255, 255, 255))
-        pygame.display.flip()
-        for event in pygame.event.get():
+        for event in pygame.event.get(): # loop until user quits
             if event.type == pygame.QUIT:
-                return
+                return 
+        screen.fill("black") # fill with black
+        pygame.display.flip() # update display
+        dt = clock.tick(60) / 1000 # framerate to 60 fps and return amount of time since last call (delta time)
 
 
 if __name__ == "__main__":
