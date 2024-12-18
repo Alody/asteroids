@@ -1,5 +1,6 @@
-# Don't forget source venv/bin/activate to enter venv
+# Don't forget source venv/bin/activate to init virtual environment innit
 import sys
+import os
 import pygame
 from constants import *
 from player import Player
@@ -11,8 +12,16 @@ from shot import Shot
 
 def main():
     pygame.init()
+    pygame.font.init()
+
+    score = 0
+    score_increment = 10
+    font = pygame.font.Font(None, 36)
+
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
+
+
 
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
@@ -39,6 +48,9 @@ def main():
 
         screen.fill("black")
 
+        score_text = font.render(f'Score: {score}', True, (255, 255, 255))
+        screen.blit(score_text, (10, 10))
+
         for asteroid in asteroids:
             if asteroid.collision_check(player):
                 print("Game over!")
@@ -48,6 +60,7 @@ def main():
                 if asteroid.collision_check(shot):
                     shot.kill()
                     asteroid.split()
+                    score += score_increment
 
         for obj in drawable:
             obj.draw(screen)
