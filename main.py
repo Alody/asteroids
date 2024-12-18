@@ -1,4 +1,5 @@
 # Don't forget source venv/bin/activate to enter venv
+import sys
 import pygame
 from constants import *
 from player import Player
@@ -36,7 +37,8 @@ def main():
         screen.fill("black")
 
         for obj in asteroids:
-            obj.collision_check(player)
+            if obj.collision_check(player) == True:
+                sys.exit()
 
         for obj in drawable:
             obj.draw(screen)
