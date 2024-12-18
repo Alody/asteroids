@@ -16,7 +16,7 @@ def main():
 
     score = 0
     score_increment = 10
-    font = pygame.font.Font(None, 36)
+    font = pygame.font.Font('hobo.ttf', 36)
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
@@ -52,9 +52,24 @@ def main():
         screen.blit(score_text, (10, 10))
 
         for asteroid in asteroids:
-            if asteroid.collision_check(player):
-                print("Game over!")
-                sys.exit()
+            if asteroid.collision_check(player):  # game over stuffs
+                screen.fill("black")
+                death_text = font.render(f"Game Over! Final Score: {score}", True, (255, 255, 255))
+                screen.blit(death_text, (SCREEN_WIDTH / 2 - death_text.get_width() / 2, SCREEN_HEIGHT / 3))
+                exit_text = font.render("Press any key to exit", True, (255, 255, 255))
+                screen.blit(exit_text, (SCREEN_WIDTH / 2 - exit_text.get_width() / 2, SCREEN_HEIGHT / 2))
+                
+                pygame.display.flip()
+
+                waiting_for_key = True
+                while waiting_for_key:
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            return
+                        elif event.type == pygame.KEYDOWN:  # any key press to exit
+                            waiting_for_key = False
+                            pygame.quit()
+                            sys.exit()
 
             for shot in shots:
                 if asteroid.collision_check(shot):
