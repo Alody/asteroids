@@ -35,6 +35,9 @@ def main():
 
         screen.fill("black")
 
+        for obj in asteroids:
+            obj.collision_check(player)
+
         for obj in drawable:
             obj.draw(screen)
 
